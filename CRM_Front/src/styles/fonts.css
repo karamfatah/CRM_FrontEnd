@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'DroidKufi';
+    src: url('../assets/font/DroidKufi-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  /* Apply DroidKufi font for Arabic text */
+  body.arabic {
+    font-family: 'DroidKufi', sans-serif !important;
+  }
+  
+  /* Ensure all elements inherit the font */
+  body.arabic * {
+    font-family: 'DroidKufi', sans-serif !important;
+  }

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create NCR Template</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/mongodb@4.17.0/dist/mongo.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+  <h1 class="text-3xl font-bold text-center mb-6">Create NCR Template</h1>
+
+  <div class="flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto">
+    <!-- Form Section (Left) -->
+    <div class="w-full lg:w-1/3 bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Define Template</h2>
+      <form id="templateForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Template Name</label>
+          <input type="text" id="templateName" class="mt-1 block w-full p-2 border rounded-md" required oninput="updatePreviews()">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Created By (User ID)</label>
+          <input type="text" id="createdBy" class="mt-1 block w-full p-2 border rounded-md" value="user_001" required oninput="updatePreviews()">
+        </div>
+
+        <!-- Header Section -->
+        <div>
+          <h3 class="text-lg font-medium mb-2">Header</h3>
+          <div id="headerSubHeadersList" class="space-y-2 mb-2"></div>
+          <div class="mb-2">
+            <label class="block text-sm font-medium text-gray-700">Sub Header Name</label>
+            <input type="text" id="header_sub_name" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Checker Data">
+            <button type="button" onclick="addSubSection('header')" class="mt-2 bg-gray-200 p-2 rounded-md">+ Add Sub Header</button>
+          </div>
+          <div id="headerSubSubSection" class="mb-2 hidden">
+            <label class="block text-sm font-medium text-gray-700">Sub-Sub Header Name</label>
+            <input type="text" id="header_sub_sub_name" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Inspector Details">
+            <button type="button" onclick="addSubSubSection('header')" class="mt-2 bg-gray-200 p-2 rounded-md">+ Add Sub-Sub Header</button>
+          </div>
+          <div id="headerFieldInput" class="hidden">
+            <div class="flex space-x-2">
+              <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Field Name</label>
+                <input type="text" id="header_name" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., inspector_name">
+              </div>
+              <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Type</label>
+                <select id="header_type" class="mt-1 block w-full p-2 border rounded-md">
+                  <option value="text">Text</option>
+                  <option value="checkbox">Checkbox</option>
+                  <option value="array">Array</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-2">
+              <label class="block text-sm font-medium text-gray-700">Options (comma-separated, for checkbox/array)</label>
+              <input type="text" id="header_options" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., option1,option2,option3">
+            </div>
+            <div class="mt-2">
+              <label class="block text-sm font-medium text-gray-700">Default Value</label>
+              <input type="text" id="header_value" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Default Value">
+            </div>
+            <button type="button" onclick="addField('header')" class="mt-2 bg-gray-200 p-2 rounded-md">+ Add Field</button>
+          </div>
+        </div>
+
+        <!-- Body Section -->
+        <div>
+          <h3 class="text-lg font-medium mb-2">Body</h3>
+          <div id="bodySubBodiesList" class="space-y-2 mb-2"></div>
+          <div class="mb-2">
+            <label class="block text-sm font-medium text-gray-700">Sub Body Name</label>
+            <input type="text" id="body_sub_name" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Product Conditions">
+            <button type="button" onclick="addSubSection('body')" class="mt-2 bg-gray-200 p-2 rounded-md">+ Add Sub Body</button>
+          </div>
+          <div id="bodySubSubSection" class="mb-2 hidden">
+            <label class="block text-sm font-medium text-gray-700">Sub-Sub Body Name</label>
+            <input type="text" id="body_sub_sub_name" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Temperature Check">
+            <button type="button" onclick="addSubSubSection('body')" class="mt-2 bg-gray-200 p-2 rounded-md">+ Add Sub-Sub Body</button>
+          </div>
+          <div id="bodyFieldInput" class="hidden">
+            <div class="flex space-x-2">
+              <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Field Name</label>
+                <input type="text" id="body_name" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., product_conditions.Temperature.condition">
+              </div>
+              <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Type</label>
+                <select id="body_type" class="mt-1 block w-full p-2 border rounded-md">
+                  <option value="text">Text</option>
+                  <option value="checkbox">Checkbox</option>
+                  <option value="array">Array</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-2">
+              <label class="block text-sm font-medium text-gray-700">Options (comma-separated, for checkbox/array)</label>
+              <input type="text" id="body_options" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., option1,option2,option3">
+            </div>
+            <div class="mt-2">
+              <label class="block text-sm font-medium text-gray-700">Default Value</label>
+              <input type="text" id="body_value" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Default Value">
+            </div>
+            <button type="button" onclick="addField('body')" class="mt-2 bg-gray-200 p-2 rounded-md">+ Add Field</button>
+          </div>
+        </div>
+
+        <!-- Footer Section -->
+        <div>
+          <h3 class="text-lg font-medium mb-2">Footer</h3>
+          <div id="footerSubFootersList" class="space-y-2 mb-2"></div>
+          <div class="mb-2">
+            <label class="block text-sm font-medium text-gray-700">Sub Footer Name</label>
+            <input type="text" id="footer_sub_name" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Approval Info">
+            <button type="button" onclick="addSubSection('footer')" class="mt-2 bg-gray-200 p-2 rounded-md">+ Add Sub Footer</button>
+          </div>
+          <div id="footerSubSubSection" class="mb-2 hidden">
+            <label class="block text-sm font-medium text-gray-700">Sub-Sub Footer Name</label>
+            <input type="text" id="footer_sub_sub_name" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Signatures">
+            <button type="button" onclick="addSubSubSection('footer')" class="mt-2 bg-gray-200 p-2 rounded-md">+ Add Sub-Sub Footer</button>
+          </div>
+          <div id="footerFieldInput" class="hidden">
+            <div class="flex space-x-2">
+              <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Field Name</label>
+                <input type="text" id="footer_name" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., prepared_by">
+              </div>
+              <div class="flex-1">
+                <label class="block text-sm font-medium text-gray-700">Type</label>
+                <select id="footer_type" class="mt-1 block w-full p-2 border rounded-md">
+                  <option value="text">Text</option>
+                  <option value="checkbox">Checkbox</option>
+                  <option value="array">Array</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-2">
+              <label class="block text-sm font-medium text-gray-700">Options (comma-separated, for checkbox/array)</label>
+              <input type="text" id="footer_options" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., option1,option2,option3">
+            </div>
+            <div class="mt-2">
+              <label class="block text-sm font-medium text-gray-700">Default Value</label>
+              <input type="text" id="footer_value" class="mt-1 block w-full p-2 border rounded-md" placeholder="e.g., Default Value">
+            </div>
+            <button type="button" onclick="addField('footer')" class="mt-2 bg-gray-200 p-2 rounded-md">+ Add Field</button>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700">Save Template</button>
+      </form>
+      <div id="templateResult" class="mt-4 text-sm"></div>
+    </div>
+
+    <!-- JSON Preview Section (Middle) -->
+    <div class="w-full lg:w-1/3 bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">JSON Preview</h2>
+      <pre id="templatePreview" class="bg-gray-50 p-4 rounded-md overflow-auto h-[80vh] text-sm"></pre>
+    </div>
+
+    <!-- User UI Preview Section (Right) -->
+    <div class="w-full lg:w-1/3 bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">User UI Preview</h2>
+      <div id="userUIPreview" class="space-y-4 h-[80vh] overflow-auto">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Header</h3>
+          <div id="userUIHeaderFields" class="space-y-2"></div>
+        </div>
+        <div>
+          <h3 class="text-lg font-medium mb-2">Body</h3>
+          <div id="userUIBodyFields" class="space-y-2"></div>
+        </div>
+        <div>
+          <h3 class="text-lg font-medium mb-2">Footer</h3>
+          <div id="userUIFooterFields" class="space-y-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // MongoDB connection
+    const mongoUri = 'mongodb://admin:gd%5Eghdgd5ksau7399%23%23G5R5Td201251542@localhost/admin';
+    let client;
+
+    async function connectMongo() {
+      if (!client) {
+        try {
+          client = new MongoDB.MongoClient(mongoUri);
+          await client.connect();
+          console.log("Connected to MongoDB");
+        } catch (error) {
+          console.error("MongoDB connection error:", error);
+          throw error;
+        }
+      }
+      return client.db('audit_app');
+    }
+
+    // Store the structure
+    const structure = {
+      header: { sub_headers: [] },
+      body: { sub_bodies: [] },
+      footer: { sub_footers: [] }
+    };
+    let currentSubSection = {
+      header: null,
+      body: null,
+      footer: null
+    };
+    let currentSubSubSection = {
+      header: null,
+      body: null,
+      footer: null
+    };
+
+    // Add a sub-section (Sub Header, Sub Body, Sub Footer)
+    function addSubSection(section) {
+      const subNameInput = document.getElementById(`${section}_sub_name`);
+      const subName = subNameInput.value.trim();
+
+      if (!subName) {
+        alert(`Please enter a name for the ${section} sub-section.`);
+        return;
+      }
+
+      // Add the sub-section
+      const subSection = { name: subName, sub_sub_sections: [] };
+      if (section === 'header') {
+        structure.header.sub_headers.push(subSection);
+      } else if (section === 'body') {
+        structure.body.sub_bodies.push(subSection);
+      } else {
+        structure.footer.sub_footers.push(subSection);
+      }
+      currentSubSection[section] = subSection;
+      currentSubSubSection[section] = null; // Reset sub-sub-section
+
+      // Display the sub-section in the list
+      const listContainer = document.getElementById(`${section}Sub${section === 'header' ? 'Headers' : section === 'body' ? 'Bodies' : 'Footers'}List`);
+      const subDiv = document.createElement('div');
+      subDiv.className = 'border p-2 rounded-md';
+      subDiv.innerHTML = `
+        <p><strong>${subName}</strong></p>
+        <div id="${section}_${subName.replace(/\s+/g, '_')}_sub_sub" class="ml-4 space-y-2"></div>
+      `;
+      listContainer.appendChild(subDiv);
+
+      // Clear the sub-section name input
+      subNameInput.value = '';
+
+      // Show the sub-sub-section input
+      document.getElementById(`${section}SubSubSection`).classList.remove('hidden');
+      document.getElementById(`${section}FieldInput`).classList.add('hidden');
+
+      updatePreviews();
+    }
+
+    // Add a sub-sub-section (Sub-Sub Header, Sub-Sub Body, Sub-Sub Footer)
+    function addSubSubSection(section) {
+      if (!currentSubSection[section]) {
+        alert(`Please add a sub-section in the ${section} section first.`);
+        return;
+      }
+
+      const subSubNameInput = document.getElementById(`${section}_sub_sub_name`);
+      const subSubName = subSubNameInput.value.trim();
+
+      if (!subSubName) {
+        alert(`Please enter a name for the ${section} sub-sub-section.`);
+        return;
+      }
+
+      // Add the sub-sub-section
+      const subSubSection = { name: subSubName, fields: [] };
+      if (section === 'header') {
+        currentSubSection[section].sub_sub_headers = currentSubSection[section].sub_sub_headers || [];
+        currentSubSection[section].sub_sub_headers.push(subSubSection);
+      } else if (section === 'body') {
+        currentSubSection[section].sub_sub_bodies = currentSubSection[section].sub_sub_bodies || [];
+        currentSubSection[section].sub_sub_bodies.push(subSubSection);
+      } else {
+        currentSubSection[section].sub_sub_footers = currentSubSection[section].sub_sub_footers || [];
+        currentSubSection[section].sub_sub_footers.push(subSubSection);
+      }
+      currentSubSubSection[section] = subSubSection;
+
+      // Display the sub-sub-section in the list
+      const subName = currentSubSection[section].name.replace(/\s+/g, '_');
+      const subSubContainer = document.getElementById(`${section}_${subName}_sub_sub`);
+      const subSubDiv = document.createElement('div');
+      subSubDiv.className = 'border p-2 rounded-md';
+      subSubDiv.innerHTML = `
+        <p><strong>${subSubName}</strong></p>
+        <div id="${section}_${subName}_${subSubName.replace(/\s+/g, '_')}_fields" class="ml-4 space-y-2"></div>
+      `;
+      subSubContainer.appendChild(subSubDiv);
+
+      // Clear the sub-sub-section name input
+      subSubNameInput.value = '';
+
+      // Show the field input section
+      document.getElementById(`${section}FieldInput`).classList.remove('hidden');
+
+      updatePreviews();
+    }
+
+    // Add field to the current sub-sub-section
+    function addField(section) {
+      if (!currentSubSection[section]) {
+        alert(`Please add a sub-section in the ${section} section first.`);
+        return;
+      }
+      if (!currentSubSubSection[section]) {
+        alert(`Please add a sub-sub-section in the ${section} section first.`);
+        return;
+      }
+
+      const nameInput = document.getElementById(`${section}_name`);
+      const typeInput = document.getElementById(`${section}_type`);
+      const optionsInput = document.getElementById(`${section}_options`);
+      const valueInput = document.getElementById(`${section}_value`);
+
+      const name = nameInput.value.trim();
+      const type = typeInput.value;
+      const options = optionsInput.value ? optionsInput.value.split(',').map(s => s.trim()) : [];
+      const value = valueInput.value || (type === 'checkbox' || type === 'array' ? [] : '');
+
+      if (!name) {
+        alert(`Please enter a field name for the ${section} section.`);
+        return;
+      }
+
+      // Add field to the current sub-sub-section
+      const field = { name, type, options, value };
+      currentSubSubSection[section].fields.push(field);
+
+      // Display the added field in the sub-sub-section list
+      const subName = currentSubSection[section].name.replace(/\s+/g, '_');
+      const subSubName = currentSubSubSection[section].name.replace(/\s+/g, '_');
+      const fieldsContainer = document.getElementById(`${section}_${subName}_${subSubName}_fields`);
+      const fieldDiv = document.createElement('div');
+      fieldDiv.className = 'border p-1 rounded-md';
+      fieldDiv.innerHTML = `
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Type:</strong> ${type}</p>
+        <p><strong>Options:</strong> ${options.length ? options.join(', ') : 'N/A'}</p>
+        <p><strong>Default Value:</strong> ${Array.isArray(value) ? value.join(', ') : value}</p>
+      `;
+      fieldsContainer.appendChild(fieldDiv);
+
+      // Clear inputs
+      nameInput.value = '';
+      typeInput.value = 'text';
+      optionsInput.value = '';
+      valueInput.value = '';
+
+      updatePreviews();
+    }
+
+    // Update both previews
+    function updatePreviews() {
+      try {
+        const templateName = document.getElementById('templateName').value || "Unnamed Template";
+        const createdBy = document.getElementById('createdBy').value || "Unknown User";
+        const sections = ['header', 'body', 'footer'];
+        const templateStructure = { header: { sub_headers: [] }, body: { sub_bodies: [] }, footer: { sub_footers: [] } };
+
+        // Copy stored sub-sections
+        templateStructure.header.sub_headers = structure.header.sub_headers;
+        templateStructure.body.sub_bodies = structure.body.sub_bodies;
+        templateStructure.footer.sub_footers = structure.footer.sub_footers;
+
+        // Add any current field input if filled
+        sections.forEach(section => {
+          if (currentSubSection[section] && currentSubSubSection[section]) {
+            const nameInput = document.getElementById(`${section}_name`);
+            const typeInput = document.getElementById(`${section}_type`);
+            const optionsInput = document.getElementById(`${section}_options`);
+            const valueInput = document.getElementById(`${section}_value`);
+
+            const name = nameInput.value.trim();
+            const type = typeInput.value;
+            const options = optionsInput.value ? optionsInput.value.split(',').map(s => s.trim()) : [];
+            const value = valueInput.value || (type === 'checkbox' || type === 'array' ? [] : '');
+
+            if (name) {
+              const tempSubSubSection = { ...currentSubSubSection[section], fields: [...currentSubSubSection[section].fields, { name, type, options, value }] };
+              const subSectionKey = section === 'header' ? 'sub_sub_headers' : section === 'body' ? 'sub_sub_bodies' : 'sub_sub_footers';
+              const subSectionList = section === 'header' ? templateStructure.header.sub_headers :
+                                   section === 'body' ? templateStructure.body.sub_bodies :
+                                   templateStructure.footer.sub_footers;
+              const updatedSubSection = {
+                ...currentSubSection[section],
+                [subSectionKey]: currentSubSection[section][subSectionKey].map(subSub =>
+                  subSub.name === currentSubSubSection[section].name ? tempSubSubSection : subSub
+                )
+              };
+              if (section === 'header') {
+                templateStructure.header.sub_headers = templateStructure.header.sub_headers.map(sub =>
+                  sub.name === currentSubSection[section].name ? updatedSubSection : sub
+                );
+              } else if (section === 'body') {
+                templateStructure.body.sub_bodies = templateStructure.body.sub_bodies.map(sub =>
+                  sub.name === currentSubSection[section].name ? updatedSubSection : sub
+                );
+              } else {
+                templateStructure.footer.sub_footers = templateStructure.footer.sub_footers.map(sub =>
+                  sub.name === currentSubSection[section].name ? updatedSubSection : sub
+                );
+              }
+            }
+          }
+        });
+
+        const template = {
+          name: templateName,
+          description: "Dynamic NCR template",
+          created_by: createdBy,
+          created_at: new Date().toISOString(),
+          structure: templateStructure
+        };
+
+        // Update JSON Preview
+        document.getElementById('templatePreview').textContent = JSON.stringify(template, null, 2);
+
+        // Update User UI Preview
+        sections.forEach(section => {
+          const uiFieldsContainer = document.getElementById(`userUI${section.charAt(0).toUpperCase() + section.slice(1)}Fields`);
+          uiFieldsContainer.innerHTML = '';
+          const subSections = section === 'header' ? templateStructure.header.sub_headers :
+                             section === 'body' ? templateStructure.body.sub_bodies :
+                             templateStructure.footer.sub_footers;
+          subSections.forEach(subSection => {
+            const subDiv = document.createElement('div');
+            subDiv.className = 'mb-4';
+            subDiv.innerHTML = `<h4 class="text-md font-medium mb-2">${subSection.name}</h4>`;
+            const subSubSectionsKey = section === 'header' ? 'sub_sub_headers' : section === 'body' ? 'sub_sub_bodies' : 'sub_sub_footers';
+            const subSubSections = subSection[subSubSectionsKey] || [];
+            subSubSections.forEach(subSubSection => {
+              const subSubDiv = document.createElement('div');
+              subSubDiv.className = 'ml-4 mb-2';
+              subSubDiv.innerHTML = `<h5 class="text-sm font-medium mb-1">${subSubSection.name}</h5>`;
+              const fieldsDiv = document.createElement('div');
+              fieldsDiv.className = 'space-y-2';
+              subSubSection.fields.forEach(field => {
+                const fieldDiv = document.createElement('div');
+                fieldDiv.className = 'border p-2 rounded-md';
+                if (field.type === 'text') {
+                  fieldDiv.innerHTML = `
+                    <label class="block text-sm font-medium text-gray-700">${field.name}</label>
+                    <input type="text" class="mt-1 block w-full p-2 border rounded-md" value="${field.value}" readonly>
+                  `;
+                } else if (field.type === 'checkbox' || field.type === 'array') {
+                  fieldDiv.innerHTML = `
+                    <label class="block text-sm font-medium text-gray-700">${field.name}</label>
+                    ${field.options.map(opt => `
+                      <label class="inline-flex items-center mr-4">
+                        <input type="checkbox" ${field.value.includes(opt) ? 'checked' : ''} disabled>
+                        <span class="ml-2">${opt}</span>
+                      </label>
+                    `).join('')}
+                  `;
+                }
+                fieldsDiv.appendChild(fieldDiv);
+              });
+              subSubDiv.appendChild(fieldsDiv);
+              subDiv.appendChild(subSubDiv);
+            });
+            uiFieldsContainer.appendChild(subDiv);
+          });
+        });
+      } catch (error) {
+        console.error("Error updating previews:", error);
+        document.getElementById('templatePreview').textContent = `Error: ${error.message}`;
+      }
+    }
+
+    // Handle form submission
+    document.getElementById('templateForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const templateName = document.getElementById('templateName').value;
+      const createdBy = document.getElementById('createdBy').value;
+      const resultDiv = document.getElementById('templateResult');
+
+      const templateStructure = {
+        header: { sub_headers: structure.header.sub_headers },
+        body: { sub_bodies: structure.body.sub_bodies },
+        footer: { sub_footers: structure.footer.sub_footers }
+      };
+
+      // Add any current field input if filled
+      const sections = ['header', 'body', 'footer'];
+      sections.forEach(section => {
+        if (currentSubSection[section] && currentSubSubSection[section]) {
+          const nameInput = document.getElementById(`${section}_name`);
+          const typeInput = document.getElementById(`${section}_type`);
+          const optionsInput = document.getElementById(`${section}_options`);
+          const valueInput = document.getElementById(`${section}_value`);
+
+          const name = nameInput.value.trim();
+          const type = typeInput.value;
+          const options = optionsInput.value ? optionsInput.value.split(',').map(s => s.trim()) : [];
+          const value = valueInput.value || (type === 'checkbox' || type === 'array' ? [] : '');
+
+          if (name) {
+            const tempSubSubSection = { ...currentSubSubSection[section], fields: [...currentSubSubSection[section].fields, { name, type, options, value }] };
+            const subSectionKey = section === 'header' ? 'sub_sub_headers' : section === 'body' ? 'sub_sub_bodies' : 'sub_sub_footers';
+            const subSectionList = section === 'header' ? templateStructure.header.sub_headers :
+                                 section === 'body' ? templateStructure.body.sub_bodies :
+                                 templateStructure.footer.sub_footers;
+            const updatedSubSection = {
+              ...currentSubSection[section],
+              [subSectionKey]: currentSubSection[section][subSectionKey].map(subSub =>
+                subSub.name === currentSubSubSection[section].name ? tempSubSubSection : subSub
+              )
+            };
+            if (section === 'header') {
+              templateStructure.header.sub_headers = templateStructure.header.sub_headers.map(sub =>
+                sub.name === currentSubSection[section].name ? updatedSubSection : sub
+              );
+            } else if (section === 'body') {
+              templateStructure.body.sub_bodies = templateStructure.body.sub_bodies.map(sub =>
+                sub.name === currentSubSection[section].name ? updatedSubSection : sub
+              );
+            } else {
+              templateStructure.footer.sub_footers = templateStructure.footer.sub_footers.map(sub =>
+                sub.name === currentSubSection[section].name ? updatedSubSection : sub
+              );
+            }
+          }
+        }
+      });
+
+      // Ensure at least one sub-section is defined
+      if (!templateStructure.header.sub_headers.length && !templateStructure.body.sub_bodies.length && !templateStructure.footer.sub_footers.length) {
+        alert("Please add at least one sub-section to the template.");
+        return;
+      }
+
+      const template = {
+        name: templateName,
+        description: "Dynamic NCR template",
+        created_by: createdBy,
+        created_at: new Date(),
+        structure: templateStructure
+      };
+
+      try {
+        const db = await connectMongo();
+        const result = await db.collection('templates').insertOne(template);
+        resultDiv.innerHTML = `<p class="text-green-600">Template created! ID: ${result.insertedId}</p>`;
+      } catch (error) {
+        console.error("Error saving template:", error);
+        resultDiv.innerHTML = `<p class="text-red-600">Error: ${error.message}</p>`;
+      }
+    });
+
+    // Initial preview
+    updatePreviews();
+  </script>
+</body>
+</html>

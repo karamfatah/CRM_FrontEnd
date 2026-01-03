@@ -1,0 +1,360 @@
+[
+  {
+    "name": ".gitignore",
+    "type": "file"
+  },
+  {
+    "name": "CHANGELOG.md",
+    "type": "file"
+  },
+  {
+    "name": "export-structure.js",
+    "type": "file"
+  },
+  {
+    "name": "index.html",
+    "type": "file"
+  },
+  {
+    "name": "package-lock.json",
+    "type": "file"
+  },
+  {
+    "name": "package.json",
+    "type": "file"
+  },
+  {
+    "name": "pnpm-lock.yaml",
+    "type": "file"
+  },
+  {
+    "name": "postcss.config.cjs",
+    "type": "file"
+  },
+  {
+    "name": "public",
+    "type": "directory",
+    "children": [
+      {
+        "name": "_redirects",
+        "type": "file"
+      }
+    ]
+  },
+  {
+    "name": "README.md",
+    "type": "file"
+  },
+  {
+    "name": "src",
+    "type": "directory",
+    "children": [
+      {
+        "name": "App.jsx",
+        "type": "file"
+      },
+      {
+        "name": "charts",
+        "type": "directory",
+        "children": [
+          {
+            "name": "BarChart01.jsx",
+            "type": "file"
+          },
+          {
+            "name": "BarChart02.jsx",
+            "type": "file"
+          },
+          {
+            "name": "BarChart03.jsx",
+            "type": "file"
+          },
+          {
+            "name": "ChartjsConfig.jsx",
+            "type": "file"
+          },
+          {
+            "name": "DoughnutChart.jsx",
+            "type": "file"
+          },
+          {
+            "name": "LineChart01.jsx",
+            "type": "file"
+          },
+          {
+            "name": "LineChart02.jsx",
+            "type": "file"
+          },
+          {
+            "name": "RealtimeChart.jsx",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "components",
+        "type": "directory",
+        "children": [
+          {
+            "name": "Datepicker.jsx",
+            "type": "file"
+          },
+          {
+            "name": "DateSelect.jsx",
+            "type": "file"
+          },
+          {
+            "name": "DropdownEditMenu.jsx",
+            "type": "file"
+          },
+          {
+            "name": "DropdownFilter.jsx",
+            "type": "file"
+          },
+          {
+            "name": "DropdownHelp.jsx",
+            "type": "file"
+          },
+          {
+            "name": "DropdownNotifications.jsx",
+            "type": "file"
+          },
+          {
+            "name": "DropdownProfile.jsx",
+            "type": "file"
+          },
+          {
+            "name": "ModalSearch.jsx",
+            "type": "file"
+          },
+          {
+            "name": "ThemeToggle.jsx",
+            "type": "file"
+          },
+          {
+            "name": "Tooltip.jsx",
+            "type": "file"
+          },
+          {
+            "name": "ui",
+            "type": "directory",
+            "children": [
+              {
+                "name": "calendar.jsx",
+                "type": "file"
+              },
+              {
+                "name": "popover.jsx",
+                "type": "file"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "css",
+        "type": "directory",
+        "children": [
+          {
+            "name": "additional-styles",
+            "type": "directory",
+            "children": [
+              {
+                "name": "utility-patterns.css",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "style.css",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "favicon.svg",
+        "type": "file"
+      },
+      {
+        "name": "images",
+        "type": "directory",
+        "children": [
+          {
+            "name": "favicon.png",
+            "type": "file"
+          },
+          {
+            "name": "icon-01.svg",
+            "type": "file"
+          },
+          {
+            "name": "icon-02.svg",
+            "type": "file"
+          },
+          {
+            "name": "icon-03.svg",
+            "type": "file"
+          },
+          {
+            "name": "user-36-05.jpg",
+            "type": "file"
+          },
+          {
+            "name": "user-36-06.jpg",
+            "type": "file"
+          },
+          {
+            "name": "user-36-07.jpg",
+            "type": "file"
+          },
+          {
+            "name": "user-36-08.jpg",
+            "type": "file"
+          },
+          {
+            "name": "user-36-09.jpg",
+            "type": "file"
+          },
+          {
+            "name": "user-avatar-32.png",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "lib",
+        "type": "directory",
+        "children": [
+          {
+            "name": "utils.ts",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "main.jsx",
+        "type": "file"
+      },
+      {
+        "name": "pages",
+        "type": "directory",
+        "children": [
+          {
+            "name": "Dashboard.jsx",
+            "type": "file"
+          },
+          {
+            "name": "Login.jsx",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "partials",
+        "type": "directory",
+        "children": [
+          {
+            "name": "Banner.jsx",
+            "type": "file"
+          },
+          {
+            "name": "dashboard",
+            "type": "directory",
+            "children": [
+              {
+                "name": "DashboardCard01.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard02.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard03.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard04.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard05.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard06.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard07.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard08.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard09.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard10.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard11.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard12.jsx",
+                "type": "file"
+              },
+              {
+                "name": "DashboardCard13.jsx",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "Header.jsx",
+            "type": "file"
+          },
+          {
+            "name": "Sidebar.jsx",
+            "type": "file"
+          },
+          {
+            "name": "SidebarLinkGroup.jsx",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "utils",
+        "type": "directory",
+        "children": [
+          {
+            "name": "Info.jsx",
+            "type": "file"
+          },
+          {
+            "name": "ThemeContext.jsx",
+            "type": "file"
+          },
+          {
+            "name": "Transition.jsx",
+            "type": "file"
+          },
+          {
+            "name": "Utils.js",
+            "type": "file"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "vite.config.js",
+    "type": "file"
+  }
+]

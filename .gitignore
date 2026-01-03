@@ -1,0 +1,40 @@
+# Node/React
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Lockfiles (keep ONE if you want reproducible installs; delete the others)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Builds / output
+build/
+dist/
+.next/
+out/
+
+# Tests & tools
+coverage/
+playwright-report/
+test-results/
+
+# Env files
+.env
+.env.*.local
+
+# Editors/OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+*.tmp
+*.bak
+*.orig

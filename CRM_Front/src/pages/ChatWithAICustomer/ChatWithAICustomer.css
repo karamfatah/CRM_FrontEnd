@@ -1,0 +1,65 @@
+/* Mobile Optimizations for Chat Page */
+
+/* Prevent zoom on input focus on iOS */
+@media screen and (max-width: 768px) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* Ensure iframe takes full width on mobile */
+@media (max-width: 640px) {
+  iframe {
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+}
+
+/* Smooth scrolling on mobile */
+html, body {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+/* Remove tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure proper viewport handling */
+.chat-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+/* Ensure iframe is fully visible and contains input area */
+.chat-container iframe {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  border: none !important;
+  display: block !important;
+  overflow: visible !important;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* Mobile-specific header adjustments */
+@media (max-width: 640px) {
+  .chat-header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Prevent text selection on mobile for better UX */
+@media (max-width: 768px) {
+  .chat-header h1 {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
