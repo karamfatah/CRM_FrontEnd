@@ -1062,6 +1062,8 @@ const SectionsQa = () => {
     section_en: '',
     section_ar: '',
     locations_qa_id: '',
+    deliveryCost: '',
+    deliveryTime: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -1207,12 +1209,19 @@ const SectionsQa = () => {
 
     try {
       const data = await sectionQaService.getSection(section.section_qa_id, authData.org_id);
+      console.log('Section data received for edit:', data); // Debug log
       setEditingSection(section);
       setNewSection({
         section_en: data.section_en,
         section_ar: data.section_ar,
         locations_qa_id: data.locations_qa_id.toString(),
+        deliveryCost: data.deliveryCost !== null && data.deliveryCost !== undefined ? data.deliveryCost : '',
+        deliveryTime: data.deliveryTime !== null && data.deliveryTime !== undefined ? data.deliveryTime : '',
       });
+      console.log('New section state set:', { 
+        deliveryCost: data.deliveryCost !== null && data.deliveryCost !== undefined ? data.deliveryCost : '',
+        deliveryTime: data.deliveryTime !== null && data.deliveryTime !== undefined ? data.deliveryTime : ''
+      }); // Debug log
     } catch (err) {
       console.error('Error fetching section for edit:', err.message);
       setError(err.message || t('sections.fetch_edit_error'));
@@ -1237,6 +1246,8 @@ const SectionsQa = () => {
       section_en: '',
       section_ar: '',
       locations_qa_id: selectedLocation || locations[0].locations_qa_id.toString(),
+      deliveryCost: '',
+      deliveryTime: '',
     });
   };
 
@@ -1259,11 +1270,13 @@ const SectionsQa = () => {
           name_en: newSection.section_en,
           name_ar: newSection.section_ar,
           locations_qa_id: newSection.locations_qa_id,
+          deliveryCost: newSection.deliveryCost || null,
+          deliveryTime: newSection.deliveryTime || null,
         },
         authData.org_id
       );
       setEditingSection(null);
-      setNewSection({ section_en: '', section_ar: '', locations_qa_id: selectedLocation || '' });
+      setNewSection({ section_en: '', section_ar: '', locations_qa_id: selectedLocation || '', deliveryCost: '', deliveryTime: '' });
       fetchSections(selectedLocation);
       setSuccess(t('sections.update_success'));
       setTimeout(() => setSuccess(''), 3000);
@@ -1304,7 +1317,10 @@ const SectionsQa = () => {
             const workbook = XLSX.read(data, { type: 'array' });
             const sheetName = workbook.SheetNames[0];
             const sheet = workbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(sheet);
+            // Use raw: true to get raw numeric values, defval: null for empty cells
+            const jsonData = XLSX.utils.sheet_to_json(sheet, { raw: true, defval: null });
+            
+            console.log('Parsed Excel data (first row):', jsonData[0]); // Debug log
 
             if (jsonData.length === 0) {
               setError(t('sections.empty_file'));
@@ -1318,16 +1334,40 @@ const SectionsQa = () => {
               return;
             }
 
-            const bulkData = jsonData.map(row => ({
-              locations_qa_id: newSection.locations_qa_id,
-              name_en: row.name_en,
-              name_ar: row.name_ar,
-            }));
+            // Helper function to parse numeric values from Excel
+            const parseNumericValue = (value) => {
+              // Handle null, undefined, empty string
+              if (value === null || value === undefined || value === '') return null;
+              // If already a number (from raw: true), return it
+              if (typeof value === 'number') return isNaN(value) ? null : value;
+              // Convert string to number
+              const strValue = String(value).trim();
+              if (strValue === '' || strValue === 'null' || strValue === 'undefined') return null;
+              const parsed = parseFloat(strValue);
+              return isNaN(parsed) ? null : parsed;
+            };
+
+            const bulkData = jsonData.map((row, index) => {
+              const result = {
+                locations_qa_id: newSection.locations_qa_id,
+                name_en: String(row.name_en || '').trim(),
+                name_ar: String(row.name_ar || '').trim(),
+                deliveryCost: parseNumericValue(row.deliveryCost),
+                deliveryTime: parseNumericValue(row.deliveryTime),
+              };
+              console.log(`Row ${index + 1}:`, { 
+                original: { deliveryCost: row.deliveryCost, deliveryTime: row.deliveryTime },
+                parsed: { deliveryCost: result.deliveryCost, deliveryTime: result.deliveryTime }
+              }); // Debug log
+              return result;
+            });
+
+            console.log('Final bulk data:', bulkData); // Debug log
 
             await sectionQaService.bulkCreateSections(bulkData, authData.org_id);
             setIsCreating(false);
             setFile(null);
-            setNewSection({ section_en: '', section_ar: '', locations_qa_id: selectedLocation || '' });
+            setNewSection({ section_en: '', section_ar: '', locations_qa_id: selectedLocation || '', deliveryCost: '', deliveryTime: '' });
             fetchSections(selectedLocation);
             setSuccess(t('sections.bulk_create_success'));
             setTimeout(() => setSuccess(''), 3000);
@@ -1356,11 +1396,13 @@ const SectionsQa = () => {
             name_en: newSection.section_en,
             name_ar: newSection.section_ar,
             locations_qa_id: newSection.locations_qa_id,
+            deliveryCost: newSection.deliveryCost || null,
+            deliveryTime: newSection.deliveryTime || null,
           },
           authData.org_id
         );
         setIsCreating(false);
-        setNewSection({ section_en: '', section_ar: '', locations_qa_id: selectedLocation || '' });
+        setNewSection({ section_en: '', section_ar: '', locations_qa_id: selectedLocation || '', deliveryCost: '', deliveryTime: '' });
         fetchSections(selectedLocation);
         setSuccess(t('sections.create_success'));
         setTimeout(() => setSuccess(''), 3000);
@@ -1519,6 +1561,22 @@ const SectionsQa = () => {
                           {language === 'en' ? section.section_en : section.section_ar || t('sections.unknown')}
                         </p>
                       </div>
+                      {section.deliveryCost !== null && section.deliveryCost !== undefined && (
+                        <div>
+                          <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t('sections.delivery_cost')}</span>
+                          <p className="text-gray-800 dark:text-gray-100 font-semibold">
+                            {parseFloat(section.deliveryCost).toFixed(2)}
+                          </p>
+                        </div>
+                      )}
+                      {section.deliveryTime !== null && section.deliveryTime !== undefined && (
+                        <div>
+                          <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">{t('sections.delivery_time')}</span>
+                          <p className="text-gray-800 dark:text-gray-100 font-semibold">
+                            {parseFloat(section.deliveryTime).toFixed(2)}
+                          </p>
+                        </div>
+                      )}
                     </div>
                     {hasPrivilege && (
                       <div className="flex justify-end gap-3 mt-4">
@@ -1630,6 +1688,9 @@ const SectionsQa = () => {
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                           {t('sections.upload_instruction')}
                         </p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                          {t('sections.upload_instruction_note') || 'Note: deliveryCost and deliveryTime are optional columns. Leave empty or use 0 for no value.'}
+                        </p>
                       </div>
                     ) : (
                       <>
@@ -1667,6 +1728,46 @@ const SectionsQa = () => {
                             }
                             className="shadow appearance-none border border-gray-300 dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
                             required
+                          />
+                        </div>
+                        <div>
+                          <label
+                            className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
+                            htmlFor="deliveryCost"
+                          >
+                            {t('sections.delivery_cost')}
+                          </label>
+                          <input
+                            type="number"
+                            id="deliveryCost"
+                            step="0.01"
+                            min="0"
+                            value={newSection.deliveryCost}
+                            onChange={(e) =>
+                              setNewSection({ ...newSection, deliveryCost: e.target.value })
+                            }
+                            className="shadow appearance-none border border-gray-300 dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+                            placeholder={t('sections.delivery_cost_placeholder') || '0.00'}
+                          />
+                        </div>
+                        <div>
+                          <label
+                            className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"
+                            htmlFor="deliveryTime"
+                          >
+                            {t('sections.delivery_time')}
+                          </label>
+                          <input
+                            type="number"
+                            id="deliveryTime"
+                            step="0.01"
+                            min="0"
+                            value={newSection.deliveryTime}
+                            onChange={(e) =>
+                              setNewSection({ ...newSection, deliveryTime: e.target.value })
+                            }
+                            className="shadow appearance-none border border-gray-300 dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 dark:bg-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+                            placeholder={t('sections.delivery_time_placeholder') || '0.00'}
                           />
                         </div>
                       </>

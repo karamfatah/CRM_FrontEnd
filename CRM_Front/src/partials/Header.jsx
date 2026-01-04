@@ -745,8 +745,6 @@ function Header({
   variant = 'default',
   handleLogout,
 }) {
-  const [org, setOrg] = useState({});
-  const [error, setError] = useState(null);
   const [logoUrl, setLogoUrl] = useState('');
   const { t, language } = useLanguage();
   const { authData, loading } = useAuth();
@@ -756,7 +754,7 @@ function Header({
   const logoEtagRef = useRef(null);
   const logoLastModRef = useRef(null);
   const logoAbortRef = useRef(null);
-  const prevLogoKeyRef = useRef(null);
+  const prevOrgIdRef = useRef(null);
 
   // Revoke object URL on unmount
   useEffect(() => {
@@ -777,101 +775,14 @@ function Header({
     return token;
   };
 
-  /**
-   * Handles HTTP response errors based on status codes.
-   * @param {Response} response - The Fetch API response object.
-   * @returns {Promise<object>} Parsed JSON response if successful.
-   * @throws {Error} Specific error based on status code or generic error.
-   */
-  const handleResponse = async (response) => {
-    if (response.ok) {
-      return response.json();
-    }
-
-    const errorData = await response.json().catch(() => ({}));
-    const errorMessage = errorData.message || errorData.error || 'No message';
-
-    switch (response.status) {
-      case 401:
-        throw new Error('Unauthorized: Please log in again.');
-      case 403:
-        throw new Error('Forbidden: You lack the required permissions.');
-      case 404:
-        throw new Error(`Not Found: ${errorMessage}`);
-      case 400:
-        throw new Error(`Bad Request: ${errorMessage}`);
-      default:
-        throw new Error(`Failed: ${response.status} - ${errorMessage}`);
-    }
-  };
-
-  // ===== Fetch ORG (depend only on org_id, not entire authData to avoid loops) =====
-  useEffect(() => {
-    const orgId = authData?.org_id;
-    if (loading || !orgId) {
-      if (!loading && !orgId) setError('No organization ID available');
-      return;
-    }
-
-    let aborted = false;
-    (async () => {
-      try {
-        const token = checkToken();
-        const url = `${API_BASE_URL}/api/orgs?org_id=${orgId}`;
-
-        if (process.env.NODE_ENV !== 'production') {
-          console.debug('Fetching organization for org_id:', orgId);
-        }
-
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-access-tokens': token,
-            'Cache-Control': 'no-cache',
-          },
-        });
-
-        const data = await handleResponse(response);
-        const orgData = Array.isArray(data) && data.length > 0 ? data[0] : data;
-        if (!orgData?.org_id) throw new Error('Invalid organization data received');
-
-        if (!aborted) {
-          setOrg({
-            org_id: orgData.org_id,
-            org_name_en: orgData.org_name_en || '',
-            org_name_ar: orgData.org_name_ar || '',
-            org_logo: orgData.org_logo || '',
-            org_address: orgData.org_address || '',
-            org_phone: orgData.org_phone || '',
-            org_website: orgData.org_website || '',
-            country_id: orgData.country_id ?? null,
-          });
-          setError(null); // clear org error on success
-        }
-      } catch (err) {
-        if (!aborted) {
-          console.error('Failed to fetch organization:', err);
-          setError(err.message);
-        }
-      }
-    })();
-
-    return () => {
-      aborted = true;
-    };
-  }, [API_BASE_URL, authData?.org_id, loading]);
-
   // ===== Fetch LOGO with 304 handling and request de-duplication =====
   useEffect(() => {
     const orgId = authData?.org_id;
-    const logoKey = org.org_logo;
+    if (loading || !orgId) return;
 
-    if (!orgId || !logoKey) return;
-
-    // Skip if same key already loaded and we have a URL
-    if (prevLogoKeyRef.current === logoKey && logoUrl) return;
-    prevLogoKeyRef.current = logoKey;
+    // Skip if same org_id already loaded and we have a URL
+    if (prevOrgIdRef.current === orgId && logoUrl) return;
+    prevOrgIdRef.current = orgId;
 
     // Abort any previous in-flight logo request
     if (logoAbortRef.current) logoAbortRef.current.abort();
@@ -898,13 +809,8 @@ function Header({
         if (response.status === 304) return;
 
         if (!response.ok) {
-          // Don’t clobber existing logo on transient errors
-          let msg = 'Failed to fetch logo';
-          try {
-            const jd = await response.json();
-            msg = jd?.error || jd?.message || msg;
-          } catch (_) {}
-          console.warn('Logo fetch non-OK:', response.status, msg);
+          // Don't clobber existing logo on transient errors
+          console.warn('Logo fetch non-OK:', response.status);
           return;
         }
 
@@ -920,9 +826,6 @@ function Header({
           if (old && old !== objectUrl) URL.revokeObjectURL(old);
           return objectUrl;
         });
-
-        // Clear logo-specific error if present
-        setError((prev) => (prev === 'Failed to load logo' ? null : prev));
       } catch (err) {
         if (err.name !== 'AbortError') {
           console.error('Failed to fetch logo:', err);
@@ -935,7 +838,7 @@ function Header({
     return () => {
       controller.abort();
     };
-  }, [API_BASE_URL, authData?.org_id, org.org_logo, logoUrl]);
+  }, [API_BASE_URL, authData?.org_id, loading, logoUrl]);
 
   return (
     <header
@@ -954,10 +857,10 @@ function Header({
           {/* Header: Left side */}
           <div className="flex items-center">
             <NavLink end to="/" className="flex items-center">
-              {(logoUrl && !error) ? (
+              {logoUrl ? (
                 <img
                   src={logoUrl}
-                  alt={language === 'ar' ? org.org_name_ar : org.org_name_en || 'Organization Logo'}
+                  alt="Organization Logo"
                   className="w-10 h-10 rounded-full object-cover"
                   onError={() => {
                     console.warn('Logo <img> onError fired');
@@ -973,10 +876,6 @@ function Header({
                   <path d="M31.956 14.8C31.372 6.92 25.08.628 17.2.044V5.76a9.04 9.04 0 0 0 9.04 9.04h5.716ZM14.8 26.24v5.716C6.92 31.372.63 25.08.044 17.2H5.76a9.04 9.04 0 0 1 9.04 9.04Zm11.44-9.04h5.716c-.584 7.88-6.876 14.172-14.756 14.756V26.24a9.04 9.04 0 0 1 9.04-9.04ZM.044 14.8C.63 6.92 6.92.628 14.8.044V5.76a9.04 9.04 0 0 1-9.04 9.04H.044Z" />
                 </svg>
               )}
-              {/* Add Welcome: Company Name */}
-              <span className="ml-3 text-gray-800 dark:text-gray-200 text-sm font-medium">
-                {t('common.welcome')}: {language === 'ar' ? org.org_name_ar : org.org_name_en || 'Company Name'}
-              </span>
             </NavLink>
             {/* Hamburger button */}
             <button
@@ -995,7 +894,6 @@ function Header({
                 <rect x="4" y="17" width="16" height="2" />
               </svg>
             </button>
-            {error && <div className="text-red-500 text-sm ml-3">{error}</div>}
           </div>
 
           {/* Header: Right side */}

@@ -478,8 +478,8 @@ const NPSTable = () => {
                   {/* Print Header */}
                   <div className="print-header">
                     <div className="print-title">
-                      <img src="/images/logo.png" alt="Rank Riser" className="print-logo" />
-                      <span>Rank Riser</span>
+                      <img src="/images/logo.png" alt="CRM HUB Manager" className="print-logo" />
+                      <span>CRM HUB Manager</span>
                     </div>
                     {orgName && <div className="print-org">{orgName}</div>}
                   </div>
@@ -728,7 +728,7 @@ const NPSTable = () => {
                       <strong>Report Prepared by:</strong> {userName || 'Unknown User'}
                     </div>
                     <div className="print-footer-copyright">
-                      Rank Riser is a product of Quantum-G App LLC "All Rights Reserved 2025"
+                      CRM HUB Manager is a product of Quantum-G App LLC "All Rights Reserved 2025"
                     </div>
                   </div>
                 </div>

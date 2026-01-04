@@ -1073,7 +1073,9 @@ const sectionQaService = {
       section_en: sec.section_en,
       section_ar: sec.section_ar,
       locations_qa_id: sec.locations_qa_id,
-      org_id: sec.org_id
+      org_id: sec.org_id,
+      deliveryCost: sec.deliveryCost !== undefined ? sec.deliveryCost : null,
+      deliveryTime: sec.deliveryTime !== undefined ? sec.deliveryTime : null
     }));
     console.log('Mapped sections:', mappedData);
     return mappedData;
@@ -1133,7 +1135,9 @@ const sectionQaService = {
       section_en: data.section_en,
       section_ar: data.section_ar,
       locations_qa_id: data.locations_qa_id,
-      org_id: data.org_id
+      org_id: data.org_id,
+      deliveryCost: data.deliveryCost !== undefined ? data.deliveryCost : null,
+      deliveryTime: data.deliveryTime !== undefined ? data.deliveryTime : null
     };
     console.log('Mapped section:', mappedData);
     return mappedData;
@@ -1231,6 +1235,8 @@ const sectionQaService = {
       sections: dataArray.map(data => ({
         name_en: data.name_en,
         name_ar: data.name_ar,
+        deliveryCost: data.deliveryCost !== undefined && data.deliveryCost !== null ? data.deliveryCost : null,
+        deliveryTime: data.deliveryTime !== undefined && data.deliveryTime !== null ? data.deliveryTime : null,
       })),
     };
 

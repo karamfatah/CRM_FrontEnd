@@ -194,6 +194,7 @@ export const AuthProvider = ({ children }) => {
           refresh_token_expiration: localStorage.getItem('refresh_token_expiration'),
           user_id: localStorage.getItem('user_id'), // Keep as string
           subscription_id: localStorage.getItem('subscription_id'), // Keep as string
+          branch: localStorage.getItem('branch') || '', // User's branch location
         };
         console.log('AuthContext: Setting authData:', storedAuthData);
         setAuthData(storedAuthData);

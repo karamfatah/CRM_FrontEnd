@@ -20,7 +20,11 @@ import {
   TrophyIcon, 
   BellAlertIcon,
   ArrowTrendingUpIcon,
-  InformationCircleIcon
+  InformationCircleIcon,
+  ShoppingCartIcon,
+  UsersIcon,
+  CubeIcon,
+  StarIcon
 } from '@heroicons/react/24/outline';
 
 // Service
@@ -210,38 +214,154 @@ const HomeLand = () => {
             ) : hasPrivilege ? (
               <div className="space-y-8">
 
+                {/* Welcome Section */}
+                <GlassCard className="p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-indigo-200 dark:border-indigo-800">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    {t('home.welcome_title')}
+                  </h2>
+                  <p className="text-gray-700 dark:text-gray-300 mb-4">
+                    {t('home.welcome_message')}
+                  </p>
+                </GlassCard>
+
+                {/* Quick Actions */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    {t('home.quick_actions_title')}
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <Link
+                      to="/customer_orders"
+                      className="p-6 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-3"
+                    >
+                      <ShoppingCartIcon className="h-8 w-8" />
+                      <span className="font-semibold text-center">{t('home.link_orders')}</span>
+                    </Link>
+                    <Link
+                      to="/make_order"
+                      className="p-6 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-3"
+                    >
+                      <ArrowTrendingUpIcon className="h-8 w-8" />
+                      <span className="font-semibold text-center">{t('home.link_make_order')}</span>
+                    </Link>
+                    <Link
+                      to="/customers_management"
+                      className="p-6 rounded-xl bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-3"
+                    >
+                      <UsersIcon className="h-8 w-8" />
+                      <span className="font-semibold text-center">{t('home.link_customers')}</span>
+                    </Link>
+                    <Link
+                      to="/products_management"
+                      className="p-6 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center gap-3"
+                    >
+                      <CubeIcon className="h-8 w-8" />
+                      <span className="font-semibold text-center">{t('home.link_products')}</span>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* CRM Features */}
+                <GlassCard className="p-6">
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    <GradientText>{t('home.features_title')}</GradientText>
+                  </h2>
+                  <p className="text-gray-700 dark:text-gray-300 mb-6">
+                    {t('home.features_description')}
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <GlassCard className="p-4">
+                      <div className="flex items-start gap-3">
+                        <ShoppingCartIcon className="h-6 w-6 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-1" />
+                        <div>
+                          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                            {t('home.feature_orders')}
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {t('home.feature_orders_desc')}
+                          </p>
+                        </div>
+                      </div>
+                    </GlassCard>
+                    <GlassCard className="p-4">
+                      <div className="flex items-start gap-3">
+                        <UsersIcon className="h-6 w-6 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-1" />
+                        <div>
+                          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                            {t('home.feature_customers')}
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {t('home.feature_customers_desc')}
+                          </p>
+                        </div>
+                      </div>
+                    </GlassCard>
+                    <GlassCard className="p-4">
+                      <div className="flex items-start gap-3">
+                        <CubeIcon className="h-6 w-6 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-1" />
+                        <div>
+                          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                            {t('home.feature_products')}
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {t('home.feature_products_desc')}
+                          </p>
+                        </div>
+                      </div>
+                    </GlassCard>
+                    <GlassCard className="p-4">
+                      <div className="flex items-start gap-3">
+                        <StarIcon className="h-6 w-6 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-1" />
+                        <div>
+                          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                            {t('home.feature_ratings')}
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {t('home.feature_ratings_desc')}
+                          </p>
+                        </div>
+                      </div>
+                    </GlassCard>
+                  </div>
+                </GlassCard>
+
                 {/* Quick KPIs */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <StatCard
-                    label={t('home.kpi_org_nps')}
-                    value={dataLoading ? '...' : formatNPS(kpis.orgNPS)}
-                    delta={kpis.orgNPS !== null && kpis.orgNPS >= 0 ? `+${kpis.orgNPS}` : kpis.orgNPS !== null ? `${kpis.orgNPS}` : undefined}
-                    icon={ChartBarIcon}
-                    onClick={() => navigate('/rating_nps_dash')}
-                    className="h-full"
-                  />
-                  <StatCard
-                    label={t('home.kpi_total_responses')}
-                    value={dataLoading ? '...' : formatTotal(kpis.totalResponses)}
-                    icon={UserGroupIcon}
-                    onClick={() => navigate('/rating_dash')}
-                    className="h-full"
-                  />
-                  <StatCard
-                    label={t('home.kpi_top_branch')}
-                    value={dataLoading ? '...' : formatTopBranch()}
-                    delta={kpis.topBranchNPS !== null ? (kpis.topBranchNPS >= 0 ? `+${kpis.topBranchNPS}` : `${kpis.topBranchNPS}`) : undefined}
-                    icon={TrophyIcon}
-                    onClick={() => navigate('/rating_nps_dash')}
-                    className="h-full"
-                  />
-                  <StatCard
-                    label={t('home.kpi_alerts')}
-                    value={dataLoading ? '...' : String(kpis.alerts)}
-                    icon={BellAlertIcon}
-                    onClick={() => navigate('/rating_nps_dash')}
-                    className="h-full"
-                  />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    Customer Satisfaction Metrics
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <StatCard
+                      label={t('home.kpi_org_nps')}
+                      value={dataLoading ? '...' : formatNPS(kpis.orgNPS)}
+                      delta={kpis.orgNPS !== null && kpis.orgNPS >= 0 ? `+${kpis.orgNPS}` : kpis.orgNPS !== null ? `${kpis.orgNPS}` : undefined}
+                      icon={ChartBarIcon}
+                      onClick={() => navigate('/rating_nps_dash')}
+                      className="h-full"
+                    />
+                    <StatCard
+                      label={t('home.kpi_total_responses')}
+                      value={dataLoading ? '...' : formatTotal(kpis.totalResponses)}
+                      icon={UserGroupIcon}
+                      onClick={() => navigate('/rating_dash')}
+                      className="h-full"
+                    />
+                    <StatCard
+                      label={t('home.kpi_top_branch')}
+                      value={dataLoading ? '...' : formatTopBranch()}
+                      delta={kpis.topBranchNPS !== null ? (kpis.topBranchNPS >= 0 ? `+${kpis.topBranchNPS}` : `${kpis.topBranchNPS}`) : undefined}
+                      icon={TrophyIcon}
+                      onClick={() => navigate('/rating_nps_dash')}
+                      className="h-full"
+                    />
+                    <StatCard
+                      label={t('home.kpi_alerts')}
+                      value={dataLoading ? '...' : String(kpis.alerts)}
+                      icon={BellAlertIcon}
+                      onClick={() => navigate('/rating_nps_dash')}
+                      className="h-full"
+                    />
+                  </div>
                 </div>
 
                 {/* NPS explainer */}
@@ -268,72 +388,35 @@ const HomeLand = () => {
                   </div>
                 </GlassCard>
 
-                {/* Examples block */}
-                <GlassCard className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('home.examples_title')}</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                    <GlassCard className="p-4">
-                      <div className="font-semibold mb-2 text-gray-900 dark:text-white">{t('home.example_a_title')}</div>
-                      <div className="text-gray-600 dark:text-gray-400">{t('home.example_a_body')}</div>
-                    </GlassCard>
-                    <GlassCard className="p-4">
-                      <div className="font-semibold mb-2 text-gray-900 dark:text-white">{t('home.example_b_title')}</div>
-                      <div className="text-gray-600 dark:text-gray-400">{t('home.example_b_body')}</div>
-                    </GlassCard>
-                    <GlassCard className="p-4">
-                      <div className="font-semibold mb-2 text-gray-900 dark:text-white">{t('home.example_c_title')}</div>
-                      <div className="text-gray-600 dark:text-gray-400">{t('home.example_c_body')}</div>
-                    </GlassCard>
+
+                {/* Ratings & NPS Quick Links */}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    Customer Ratings & Feedback
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <Link 
+                      to="/rating_dash" 
+                      className="px-6 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white text-center font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      <ArrowTrendingUpIcon className="h-5 w-5" />
+                      {t('home.link_dashboard')}
+                    </Link>
+                    <Link 
+                      to="/rating_nps_dash" 
+                      className="px-6 py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white text-center font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      <ChartBarIcon className="h-5 w-5" />
+                      {t('home.link_nps')}
+                    </Link>
+                    <Link 
+                      to="/ratings" 
+                      className="px-6 py-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-center font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      <UserGroupIcon className="h-5 w-5" />
+                      {t('home.link_submit')}
+                    </Link>
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-4">
-                    {t('home.examples_footer')}
-                  </div>
-                </GlassCard>
-
-                {/* Collection methods */}
-                <GlassCard className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('home.collect_title')}</h3>
-                  <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-                    <li>{t('home.collect_qr')}</li>
-                    <li>{t('home.collect_kiosk')}</li>
-                    <li>{t('home.collect_whatsapp')}</li>
-                    <li>{t('home.collect_after_ticket')}</li>
-                  </ul>
-                </GlassCard>
-
-                {/* Guardrails & targets */}
-                <GlassCard className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t('home.guard_title')}</h3>
-                  <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-                    <li>{t('home.guard_sample')}</li>
-                    <li>{t('home.guard_targets')}</li>
-                    <li>{t('home.guard_trend')}</li>
-                  </ul>
-                </GlassCard>
-
-                {/* Quick navigation */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <Link 
-                    to="/rating_dash" 
-                    className="px-6 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white text-center font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <ArrowTrendingUpIcon className="h-5 w-5" />
-                    {t('home.link_dashboard')}
-                  </Link>
-                  <Link 
-                    to="/rating_nps_dash" 
-                    className="px-6 py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white text-center font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <ChartBarIcon className="h-5 w-5" />
-                    {t('home.link_nps')}
-                  </Link>
-                  <Link 
-                    to="/ratings" 
-                    className="px-6 py-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-center font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <UserGroupIcon className="h-5 w-5" />
-                    {t('home.link_submit')}
-                  </Link>
                 </div>
 
                 {/* Announcements */}

@@ -148,6 +148,7 @@ const Login = () => {
         refresh_token_expiration,
         subscription_id,
         user_id,
+        branch,
       } = response.data;
 
       login({
@@ -163,6 +164,7 @@ const Login = () => {
         refresh_token_expiration,
         subscription_id,
         user_id,
+        branch: branch || '',
       });
     } catch (err) {
       setError('Invalid email or password');
@@ -183,12 +185,12 @@ const Login = () => {
         <div className="flex justify-center mb-6">
           <img
             src="/images/logo.png"
-            alt="TQM 360 Logo"
+            alt="CRM HUB Manager Logo"
             className="w-16 h-16 object-cover rounded-full"
           />
         </div>
-        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white text-center mb-1">TQM 360</h2>
-        <p className="text-lg font-medium text-gray-900 dark:text-white text-center mb-2">Total Management System</p>
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white text-center mb-1">CRM HUB Manager</h2>
+        <p className="text-lg font-medium text-gray-900 dark:text-white text-center mb-2">Customer Relationship Management System</p>
         <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-6">Please sign in to continue</p>
         {error && (
           <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/50 text-red-700 dark:text-red-300 rounded-md text-sm">
@@ -251,10 +253,12 @@ const Login = () => {
           <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
             Don't have an account?{' '}
             <a
-              href="https://www.tqm-360.io"
+              href="#"
               className="text-violet-500 hover:text-violet-600 font-medium"
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={(e) => {
+                e.preventDefault();
+                alert('Please contact your administrator to register your organization.');
+              }}
             >
               Register your organization now
             </a>

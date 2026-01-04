@@ -112,11 +112,24 @@
 // export default DropdownNotifications;
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Transition from '../utils/Transition';
+import { useNotifications } from '../context/NotificationsContext';
+import { useLanguage } from '../context/LanguageContext';
+import { ShoppingCart, Package, Clock, X } from 'lucide-react';
 
 function DropdownNotifications({ align }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { notifications, unreadCount, markAsRead, markAllAsRead, clearNotifications } = useNotifications();
+  const { t } = useLanguage();
+  const navigate = useNavigate();
+
+  // Debug logging
+  useEffect(() => {
+    console.log('DropdownNotifications: Notifications count:', notifications.length);
+    console.log('DropdownNotifications: Unread count:', unreadCount);
+    console.log('DropdownNotifications: Notifications:', notifications);
+  }, [notifications, unreadCount]);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -164,7 +177,13 @@ function DropdownNotifications({ align }) {
           <path d="M7 0a7 7 0 0 0-7 7c0 1.202.308 2.33.84 3.316l-.789 2.368a1 1 0 0 0 1.265 1.265l2.595-.865a1 1 0 0 0-.632-1.898l-.698.233.3-.9a1 1 0 0 0-.104-.85A4.97 4.97 0 0 1 2 7a5 5 0 0 1 5-5 4.99 4.99 0 0 1 4.093 2.135 1 1 0 1 0 1.638-1.148A6.99 6.99 0 0 0 7 0Z" />
           <path d="M11 6a5 5 0 0 0 0 10c.807 0 1.567-.194 2.24-.533l1.444.482a1 1 0 0 0 1.265-1.265l-.482-1.444A4.962 4.962 0 0 0 16 11a5 5 0 0 0-5-5Zm-3 5a3 3 0 0 1 6 0c0 .588-.171 1.134-.466 1.6a1 1 0 0 0-.115.82 1 1 0 0 0-.82.114A2.973 2.973 0 0 1 11 14a3 3 0 0 1-3-3Z" />
         </svg>
-        <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-gray-100 dark:border-gray-900 rounded-full"></div>
+        {unreadCount > 0 && (
+          <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-red-500 border-2 border-white dark:border-gray-900 rounded-full flex items-center justify-center px-1 z-10">
+            <span className="text-[10px] font-bold text-white leading-none">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          </div>
+        )}
       </button>
 
       <Transition
@@ -184,8 +203,93 @@ function DropdownNotifications({ align }) {
           onFocus={() => setDropdownOpen(true)}
           onBlur={() => setDropdownOpen(false)}
         >
-          <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase pt-1.5 pb-2 px-4">Notifications</div>
-          <div className="text-sm text-gray-800 dark:text-gray-100 text-center py-4">Coming soon</div>
+          <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase pt-1.5 pb-2 px-4 flex items-center justify-between">
+            <span>Notifications</span>
+            {unreadCount > 0 && (
+              <button
+                onClick={markAllAsRead}
+                className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline"
+              >
+                Mark all as read
+              </button>
+            )}
+          </div>
+          {notifications.length === 0 ? (
+            <div className="text-sm text-gray-800 dark:text-gray-100 text-center py-4">
+              {t('notifications.no_notifications') || 'No notifications'}
+            </div>
+          ) : (
+            <ul className="max-h-96 overflow-y-auto">
+              {notifications.map((notification) => {
+                const Icon = notification.type === 'new_order' ? ShoppingCart : Package;
+                const isUnread = !notification.read;
+                
+                return (
+                  <li
+                    key={notification.id}
+                    className={`border-b border-gray-200 dark:border-gray-700/60 last:border-0 ${
+                      isUnread ? 'bg-indigo-50 dark:bg-indigo-900/20' : ''
+                    }`}
+                  >
+                    <button
+                      className="block w-full text-left py-2 px-4 hover:bg-gray-50 dark:hover:bg-gray-700/20"
+                      onClick={() => {
+                        markAsRead(notification.id);
+                        if (notification.order) {
+                          navigate('/order_taker');
+                          setDropdownOpen(false);
+                        }
+                      }}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                          notification.type === 'new_order' 
+                            ? 'bg-emerald-100 dark:bg-emerald-900/40' 
+                            : 'bg-blue-100 dark:bg-blue-900/40'
+                        }`}>
+                          <Icon className={`h-4 w-4 ${
+                            notification.type === 'new_order'
+                              ? 'text-emerald-600 dark:text-emerald-400'
+                              : 'text-blue-600 dark:text-blue-400'
+                          }`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className={`text-sm font-medium ${
+                              isUnread 
+                                ? 'text-gray-900 dark:text-white' 
+                                : 'text-gray-700 dark:text-gray-300'
+                            }`}>
+                              {notification.title}
+                            </span>
+                            {isUnread && (
+                              <div className="w-2 h-2 bg-indigo-600 dark:bg-indigo-400 rounded-full"></div>
+                            )}
+                          </div>
+                          <span className="block text-xs text-gray-600 dark:text-gray-400 mb-1">
+                            {notification.message}
+                          </span>
+                          <span className="block text-xs text-gray-400 dark:text-gray-500">
+                            {new Date(notification.timestamp).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {notifications.length > 0 && (
+            <div className="border-t border-gray-200 dark:border-gray-700/60 px-4 py-2">
+              <button
+                onClick={clearNotifications}
+                className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                {t('notifications.clear_all') || 'Clear all'}
+              </button>
+            </div>
+          )}
         </div>
       </Transition>
     </div>

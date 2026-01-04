@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
+import { NotificationsProvider } from './context/NotificationsContext';
 
 import './css/style.css';
 import './charts/ChartjsConfig';
@@ -69,6 +70,16 @@ import ReportsAbuse from './pages/ReportsAbuse/ReportsAbuse';
 import ApkUpload from './pages/ApkUpload/ApkUpload';
 import EmailReports from './pages/EmailReports/EmailReports';
 import ChatCustomers from './pages/ChatCustomers/ChatCustomers';
+import CustomerOrders from './pages/CustomerOrders/CustomerOrders';
+import MakeOrder from './pages/MakeOrder/MakeOrder';
+import CustomersManagement from './pages/CustomersManagement/CustomersManagement';
+import ProductsManagement from './pages/ProductsManagement/ProductsManagement';
+import CategoriesManagement from './pages/CategoriesManagement/CategoriesManagement';
+import BrandsManagement from './pages/BrandsManagement/BrandsManagement';
+import TagsManagement from './pages/TagsManagement/TagsManagement';
+import DepartmentsManagement from './pages/DepartmentsManagement/DepartmentsManagement';
+import InventoryManagement from './pages/InventoryManagement/InventoryManagement';
+import OrderTaker from './pages/OrderTaker/OrderTaker';
 import ChatWithAICustomer from './pages/ChatWithAICustomer/ChatWithAICustomer';
 import DeviceStatus from './pages/DeviceStatus/DeviceStatus';
 
@@ -97,7 +108,8 @@ function App() {
   return (
     <AuthProvider>
       <LanguageProvider>
-        <Routes>
+        <NotificationsProvider>
+          <Routes>
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/chat_withai_customer" element={<ChatWithAICustomer />} />
@@ -161,13 +173,24 @@ function App() {
             <Route path="/apk_management" element={<ApkUpload/>} />
             <Route path="/email_reports" element={<EmailReports/>} />
             <Route path="/chat_customers" element={<ChatCustomers/>} />
+            <Route path="/customer_orders" element={<CustomerOrders/>} />
+            <Route path="/make_order" element={<MakeOrder/>} />
+            <Route path="/order_taker" element={<OrderTaker/>} />
+            <Route path="/customers_management" element={<CustomersManagement/>} />
+            <Route path="/products_management" element={<ProductsManagement/>} />
+            <Route path="/categories_management" element={<CategoriesManagement/>} />
+            <Route path="/brands_management" element={<BrandsManagement/>} />
+            <Route path="/tags_management" element={<TagsManagement/>} />
+            <Route path="/departments_management" element={<DepartmentsManagement/>} />
+            <Route path="/inventory_management" element={<InventoryManagement/>} />
             <Route path="/device_status" element={<DeviceStatus/>} />
           </Route>
 
 
           {/* Fallback redirect */}
           <Route path="*" element={<Navigate to="/home" replace />} />
-        </Routes>
+          </Routes>
+        </NotificationsProvider>
       </LanguageProvider>
     </AuthProvider>
   );

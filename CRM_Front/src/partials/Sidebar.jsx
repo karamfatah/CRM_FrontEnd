@@ -59,6 +59,48 @@ const ChatIcon = React.memo(() => (
   </svg>
 ));
 
+const OrdersIcon = React.memo(() => (
+  <svg className="shrink-0 fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+  </svg>
+));
+
+const ProductsIcon = React.memo(() => (
+  <svg className="shrink-0 fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z" />
+  </svg>
+));
+
+const CategoriesIcon = React.memo(() => (
+  <svg className="shrink-0 fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
+  </svg>
+));
+
+const BrandsIcon = React.memo(() => (
+  <svg className="shrink-0 fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+  </svg>
+));
+
+const TagsIcon = React.memo(() => (
+  <svg className="shrink-0 fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z" />
+  </svg>
+));
+
+const DepartmentsIcon = React.memo(() => (
+  <svg className="shrink-0 fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" />
+  </svg>
+));
+
+const InventoryIcon = React.memo(() => (
+  <svg className="shrink-0 fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z" />
+  </svg>
+));
+
 const ICONS = {
   dashboard: <DashboardIcon />,
   org: <OrganizationIcon />,
@@ -67,6 +109,13 @@ const ICONS = {
   employees: <EmployeesIcon />,
   rates: <RatesIcon />,
   chat: <ChatIcon />,
+  orders: <OrdersIcon />,
+  products: <ProductsIcon />,
+  categories: <CategoriesIcon />,
+  brands: <BrandsIcon />,
+  tags: <TagsIcon />,
+  departments: <DepartmentsIcon />,
+  inventory: <InventoryIcon />,
 };
 
 function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
@@ -245,6 +294,91 @@ function Sidebar({ sidebarOpen, setSidebarOpen, variant = "default" }) {
             activeMatch: (p) => p.includes("chat_customers"),
             children: [
               { to: "/chat_customers", label: "Customers Chat", icon: ICONS.chat, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+            ],
+          },
+
+          /* ===== Customers Management =====
+             Children:
+              - Customers Management (route: /customers_management)
+          */
+          {
+            type: "group",
+            label: "Customers Management",
+            icon: <IconWrap>{ICONS.employees}</IconWrap>,
+            show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]),
+            activeMatch: (p) => p.includes("customers_management"),
+            children: [
+              { to: "/customers_management", label: "Manage Customers", icon: ICONS.employees, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+            ],
+          },
+
+          /* ===== Order Management =====
+             Children:
+              - Customer Orders (route: /customer_orders)
+              - Make Order (route: /make_order)
+          */
+          {
+            type: "group",
+            label: "Order Management",
+            icon: <IconWrap>{ICONS.orders}</IconWrap>,
+            show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]),
+            activeMatch: (p) => p.includes("customer_orders") || p.includes("make_order"),
+            children: [
+              { to: "/customer_orders", label: "Customer Orders", icon: ICONS.orders, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+              { to: "/make_order", label: "Make Orders", icon: ICONS.orders, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+            ],
+          },
+
+          /* ===== Products Management =====
+             Children:
+              - Manage Products (route: /products_management)
+              - Manage Categories (route: /categories_management)
+              - Manage Brands (route: /brands_management)
+              - Manage Tags (route: /tags_management)
+              - Make Department (route: /departments_management)
+          */
+          {
+            type: "group",
+            label: "Products Management",
+            icon: <IconWrap>{ICONS.products}</IconWrap>,
+            show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]),
+            activeMatch: (p) => p.includes("products_management") || p.includes("categories_management") || p.includes("brands_management") || p.includes("tags_management") || p.includes("departments_management"),
+            children: [
+              { to: "/products_management", label: "Manage Products", icon: ICONS.products, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+              { to: "/categories_management", label: "Manage Categories", icon: ICONS.categories, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+              { to: "/brands_management", label: "Manage Brands", icon: ICONS.brands, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+              { to: "/tags_management", label: "Manage Tags", icon: ICONS.tags, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+              { to: "/departments_management", label: "Make Department", icon: ICONS.departments, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+            ],
+          },
+
+          /* ===== Inventory Management =====
+             Children:
+              - Inventory Management (route: /inventory_management)
+          */
+          {
+            type: "group",
+            label: "Inventory Management",
+            icon: <IconWrap>{ICONS.inventory}</IconWrap>,
+            show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]),
+            activeMatch: (p) => p.includes("inventory_management"),
+            children: [
+              { to: "/inventory_management", label: "Manage Inventory", icon: ICONS.inventory, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
+            ],
+          },
+
+          /* ===== Order Taker =====
+             Children:
+              - Order Taker (route: /order_taker) - Shows orders filtered by user's branch
+          */
+          {
+            type: "group",
+            label: "Order Taker",
+            icon: <IconWrap>{ICONS.orders}</IconWrap>,
+            show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]),
+            activeMatch: (p) => p.includes("order_taker"),
+            children: [
+              { to: "/order_taker", label: "My Orders", icon: ICONS.orders, show: hasPrivilege([5000, 1, 2001, 1001, 1002, 1003, 1004]) },
             ],
           },
         ],
